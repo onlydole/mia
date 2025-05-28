@@ -30,6 +30,8 @@ jobs:
         echo "::add-mask::${{ secrets.MM_KEY }}"
         mkdir -p ../../MM-Install
         cd ../../MM-Install
+        echo "Architecture: $(uname -m)"
+        echo "Platform: $(uname -s)"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/merly-ai/MPCC-Universal/main/install.sh)" -- -k "$MM_KEY"
 
     - name: Install MerlyMentor (Windows)
