@@ -29,4 +29,4 @@ jobs:
         echo "::add-mask::${{ secrets.MM_KEY }}"
         mkdir -p ../../MM-Install
         cd ../../MM-Install
-        curl -fsSL https://raw.githubusercontent.com/merly-ai/MPCC-Universal/main/install.sh | bash -s -- -q -k "$MM_KEY"
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/merly-ai/MPCC-Universal/main/install.sh)" -- -k "$MM_KEY"
