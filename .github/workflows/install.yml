@@ -8,21 +8,24 @@ on:
   workflow_dispatch:
 
 env:
-  MM_Install: ../../MM-Install
   MM_KEY: ${{ secrets.MM_KEY }}
 
 jobs:
   inference:
-    runs-on: ubuntu-24.04-arm
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-latest, macos-13]
+    
+    runs-on: ${{ matrix.os }}
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: '0'
 
-    - name: install MerlyMentor
+    - name: Install MerlyMentor
       run: |
         echo "::add-mask::${{ secrets.MM_KEY }}"
-        mkdir "$MM_Install"
-        cd "$MM_Install"
+        mkdir -p ../../MM-Install
+        cd ../../MM-Install
         curl -fsSL https://raw.githubusercontent.com/merly-ai/MPCC-Universal/main/install.sh | bash -s -- -q -k "$MM_KEY"
