@@ -11,7 +11,7 @@ env:
   MM_KEY: ${{ secrets.MM_KEY }}
 
 jobs:
-  inference:
+  install-mentor:
     strategy:
       fail-fast: false
       matrix:
