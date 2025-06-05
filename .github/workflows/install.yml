@@ -2,9 +2,9 @@ name: MerlyMentor
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 env:
@@ -15,28 +15,39 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, ubuntu-latest, ubuntu-24.04-arm, windows-latest, windows-11-arm, macos-15, macos-14, macos-13-xlarge, macos-13]    
+        os:
+          [
+            ubuntu-22.04,
+            ubuntu-latest,
+            ubuntu-24.04-arm,
+            windows-latest,
+            windows-11-arm,
+            macos-15,
+            macos-14,
+            macos-13-xlarge,
+            macos-13,
+          ]
     runs-on: ${{ matrix.os }}
-    
+
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: '0'
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
 
-    - name: Install MerlyMentor (Unix)
-      if: runner.os != 'Windows'
-      run: |
-        echo "::add-mask::${{ secrets.MM_KEY }}"
-        mkdir -p ../../MM-Install
-        cd ../../MM-Install
-        echo "Architecture: $(uname -m)"
-        echo "Platform: $(uname -s)"
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/merly-ai/MPCC-Universal/main/install.sh)" -- -k "$MM_KEY"
+      - name: Install MerlyMentor (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          echo "::add-mask::${{ secrets.MM_KEY }}"
+          mkdir -p ../../MM-Install
+          cd ../../MM-Install
+          echo "Architecture: $(uname -m)"
+          echo "Platform: $(uname -s)"
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/merly-ai/MPCC-Universal/main/install.sh)" -- --channel=Test -k "$MM_KEY"
 
-    - name: Install MerlyMentor (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        echo "::add-mask::${{ secrets.MM_KEY }}"
-        New-Item -ItemType Directory -Force -Path "..\..\MM-Install"
-        Set-Location "..\..\MM-Install"
-        bash -c "$(curl -fsSL https://raw.githubusercontent.com/merly-ai/MPCC-Universal/main/install.sh)" -- -k "$env:MM_KEY"
+      - name: Install MerlyMentor (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          echo "::add-mask::${{ secrets.MM_KEY }}"
+          New-Item -ItemType Directory -Force -Path "..\..\MM-Install"
+          Set-Location "..\..\MM-Install"
+          bash -c "$(curl -fsSL https://raw.githubusercontent.com/merly-ai/MPCC-Universal/main/install.sh)" -- --channel=Test -k "$env:MM_KEY"
